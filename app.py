@@ -1,9 +1,17 @@
 #!/usr/bin/python3
 from flask import Flask, request, render_template
+import json
 import io
+import logging
 import chess.pgn
 
+
 app = Flask(__name__)
+
+app.config.from_file("./config.json", json.load)
+engine_path = app.config["ENGINE_PATH"]
+logging.basicConfig(level=logging.DEBUG)
+
 
 @app.route("/hello")
 def hello_world():
@@ -28,7 +36,7 @@ def play():
         # make move on chess board
         board.push(move)
 
-    engine = chess.engine.SimpleEngine.popen_uci("stockfish")
+    engine = chess.engine.SimpleEngine.popen_uci(engine_path)
 
     info = engine.analyse(board, chess.engine.Limit(time=.1))
 
