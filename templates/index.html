@@ -41,7 +41,6 @@
 
     var board = Chessboard('board', config)
     var game  = new Chess()
-    console.log(board.position())
 
 
     function onChange(old, newf){
@@ -74,18 +73,30 @@
 
     function onDrop (source, target) {
         hideTarget()
+        let piece = game.get(source)
+
+        if (piece.color === "w" && piece.type === "p"  && target[1] === "8") {
+
+        }
+        else if (piece.color === "b" && piece.type === "p" && target[1] === "1") {
+
+        }
           // see if the move is legal   
         var move = game.move({
             from: source,
             to: target,
             //promotion: 'q' // NOTE: always promote to a queen for example simplicity
         })
-        console.log(move)
-          // illegal move
+        
+        console.log(target)
+
+        // illegal move
         if (move === null) return 'snapback'
 
+
+
         $.post("/api/play", { "pgn": game.pgn() }, (data) => {
-            game.move(data.pv, { sloppy: true})
+            game.move(data.best, { sloppy: true})
             board.position(game.fen())
         })
 

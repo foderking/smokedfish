@@ -42,8 +42,9 @@ def play():
 
     engine.quit()
 
-    info["pv"] = info["pv"][0].uci()
     print(info["score"])
+    info["best"] = info["pv"][0].uci()
+    info["pv"] = [str(each) for each in info["pv"]]
 
     info["score"] = str(info["score"].pov(not info["score"].turn))
 
